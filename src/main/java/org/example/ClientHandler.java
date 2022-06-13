@@ -7,7 +7,6 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 public class ClientHandler extends Thread{
 
@@ -97,7 +96,7 @@ public class ClientHandler extends Thread{
             System.err.println("Connection failed " + e);
         }
         finally {
-            App.connected.remove(this);
+            CP.connected.remove(this);
             try {
                 clientSocket.close();
             } catch (IOException e) {
