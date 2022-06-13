@@ -43,8 +43,8 @@ public class App {
         System.out.println("Server Started Hostname: " + hostName + " " + Instant.now());
 
 //        while (true){
+            timedMessage();
             ciclo(portNumber, hostName);
-//            timedMessage();
 //            for (ClientHandler ch : connected.subList(0,connected.size()-1)) {
 //                ch.getOut().println(connected.get(connected.size()-1).getUserName() + " connected");
 //            }
@@ -56,16 +56,18 @@ public class App {
 
         cicle = new Thread(
                 ()-> {
-                    connettiClient();
+                    while (true) {
+                        connettiClient();
 
-                    connected.add(new ClientHandler(serverSocket, clientSocket));
+                        connected.add(new ClientHandler(serverSocket, clientSocket));
 
-                    connected.get(connected.size() - 1).start();
+                        connected.get(connected.size() - 1).start();
 
 //                    int count = connected.size();
+                    }
                 });
         cicle.start();
-        timedMessage();
+//        timedMessage();
 
     }
 
@@ -87,27 +89,25 @@ public class App {
 
     }
 
-    private static void broadCast(ClientHandler c, LocalDateTime time, int cl){
-        c.getOut().println("CP " + time + ": POLL CL" + cl);
-        System.out.println("CP " + time + ": POLL CL" + cl);
-    }
+//    private static void broadCast(ClientHandler c, LocalDateTime time, int cl){
+//        c.getOut().println("CP " + time + ": POLL CL" + cl);
+//        System.out.println("CP " + time + ": POLL CL" + cl);
+//    }
 
-//    questa parte di codice funziona in debug, ma non in esecuzione normale
     private static void timedMessage(){
-        int i = 1;
         th = new Thread(
                 ()->{
-                    while (true){
+                    while (true) {
                         for (ClientHandler c : connected) {
-                            broadCast(c, LocalDateTime.now(), i);
-                            try {
-                                Thread.sleep(10000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+                            c.broadCast(LocalDateTime.now(), connected.indexOf(c));
+                        }
+                        try {
+                            Thread.sleep(10000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
                     }
-                });
+                    });
         th.start();
     }
 

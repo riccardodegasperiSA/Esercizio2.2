@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class ClientHandler extends Thread{
@@ -14,7 +15,7 @@ public class ClientHandler extends Thread{
 
     private Socket clientSocket = null;
 
-//    private BufferedReader in = null;
+    private BufferedReader in = null;
 
     private PrintWriter out = null;
 
@@ -44,7 +45,7 @@ public class ClientHandler extends Thread{
 //            return;
 //        }
 
-//        creaIn();
+        creaIn();
 
 //        out.println("Inserisci user name");
 //
@@ -62,53 +63,48 @@ public class ClientHandler extends Thread{
 
 //        creaIn();
 
-        creaOut();
+//        creaOut();
 
-//            comunica();
+            ascolta();
 
 //            System.out.println(userName + " disconnected");
 //            broadCast(App.connected, userName + " disconnected");
 //        App.connected.remove(this);
     }
 
-//    private void comunica() {
-//
-//        String s;
-//
-////        out.println("Inserisci user name");
-////
-////        try {
-////            userName = in.readLine();
-////        } catch (IOException e) {
-////            e.printStackTrace();
-////        }
-////        System.out.println(userName + " logged in");
-//
-////        out.println("Benvenuto " + userName);
+    private void ascolta() {
+
+        String s;
+
+//        out.println("Inserisci user name");
 //
 //        try {
-//
-//            while ((s = in.readLine()) != null) {
-//                if (s.equals("++exit++")) {
-//                    out.println("bye bye");
-//                    break;
-//                }
-//                System.out.println(userName + ": " + s);
-//                process(s);
-//
-//            }
+//            userName = in.readLine();
 //        } catch (IOException e) {
-//            System.err.println("Connection failed " + e);
+//            e.printStackTrace();
 //        }
-//        finally {
-//            App.connected.remove(this);
-//            try {
-//                clientSocket.close();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+//        System.out.println(userName + " logged in");
+
+//        out.println("Benvenuto " + userName);
+
+        try {
+
+            while ((s = in.readLine()) != null) {
+                System.out.println(s);
+
+            }
+        } catch (IOException e) {
+            System.err.println("Connection failed " + e);
+        }
+        finally {
+            App.connected.remove(this);
+            try {
+                clientSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     private void creaOut() {
         try {
@@ -118,14 +114,14 @@ public class ClientHandler extends Thread{
         }
     }
 
-//    private void creaIn() {
-//        try {
-//            in = new BufferedReader(
-//                    new InputStreamReader(clientSocket.getInputStream()));
-//        } catch (IOException e) {
-//            System.err.println("accept failed "+ e);
-//        }
-//    }
+    private void creaIn() {
+        try {
+            in = new BufferedReader(
+                    new InputStreamReader(clientSocket.getInputStream()));
+        } catch (IOException e) {
+            System.err.println("accept failed "+ e);
+        }
+    }
 
 //    private void process(String s) {
 //
@@ -182,14 +178,9 @@ public class ClientHandler extends Thread{
 ////        return result;
 //    }
 //
-//    private void broadCast(ArrayList<ClientHandler> connected, String message){
-//        message = userName + ": " + message;
-//        for (ClientHandler current : connected){
-//            if (current != this) {
-//                current.getOut().println(message);
-//            }
-//        }
-//    }
+    public void broadCast(LocalDateTime time,  int cl){
+        this.getOut().println("CP " + time + ": POLL CL" + cl);
+    }
 //
 //    private void message(String target, String message){
 //        message = userName + ": " + message;
